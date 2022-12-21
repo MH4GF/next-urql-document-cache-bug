@@ -14,6 +14,6 @@ if (typeof window !== "undefined") {
 const Home = () => <OrderDetail />;
 
 export default withUrqlClient(() => ({
-  url: "http://example.com/graphql",
+  url: "/graphql",
   exchanges: [devtoolsExchange, ...defaultExchanges],
 }))(Home);
