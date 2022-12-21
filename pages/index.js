@@ -1,14 +1,19 @@
 import React from "react";
-import Head from "next/head";
+import { withUrqlClient } from "next-urql";
+import { setupWorker } from "msw";
+import { handlers } from "../mocks/handlers";
+import { OrderDetail } from "../components/OrderDetail";
+import { devtoolsExchange } from "@urql/devtools";
+import { defaultExchanges } from "urql";
 
-const Home = () => (
-  <div>
-    <Head>
-      <title>Home</title>
-      <link rel="icon" href="/static/favicon.ico" />
-    </Head>
-    <>hello</>
-  </div>
-);
+if (typeof window !== "undefined") {
+  const worker = setupWorker(...handlers);
+  worker.start();
+}
 
-export default Home;
+const Home = () => <OrderDetail />;
+
+export default withUrqlClient(() => ({
+  url: "http://example.com/graphql",
+  exchanges: [devtoolsExchange, ...defaultExchanges],
+}))(Home);
